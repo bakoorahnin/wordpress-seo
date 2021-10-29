@@ -215,7 +215,7 @@ class Indexable_Post_Builder_Test extends TestCase {
 				'_yoast_wpseo_linkdex'                        => [ '100' ],
 				'_yoast_wpseo_is_cornerstone'                 => [ '1' ],
 				'_yoast_wpseo_meta-robots-noindex'            => [ '1' ],
-				'_yoast_wpseo_meta-robots-adv'                => [ '' ],
+				'_yoast_wpseo_meta-robots-adv'                => [ '' ], // Should this be 'noarchive' ?
 				'_yoast_wpseo_content_score'                  => [ '50' ],
 				'_yoast_wpseo_canonical'                      => [ 'https://canonical' ],
 				'_yoast_wpseo_meta-robots-nofollow'           => [ '1' ],
@@ -281,7 +281,7 @@ class Indexable_Post_Builder_Test extends TestCase {
 			'is_cornerstone'                 => true,
 			'is_robots_noindex'              => true,
 			'is_robots_nofollow'             => true,
-			'is_robots_noarchive'            => false,
+			'is_robots_noarchive'            => false, // Should this be true ?
 			'is_robots_noimageindex'         => false,
 			'is_robots_nosnippet'            => false,
 			'primary_focus_keyword'          => 'focuskeyword',
