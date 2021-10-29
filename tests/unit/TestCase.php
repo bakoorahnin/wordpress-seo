@@ -30,7 +30,7 @@ abstract class TestCase extends YoastTestCase {
 				'is_admin'             => false,
 			]
 		);
-
+// TO DISCUSS: These two expectations do not belong in `set_up()` and are causing every test to have an inflated assertion count of +2.
 		Monkey\Functions\expect( 'get_option' )
 			->zeroOrMoreTimes()
 			->with( \call_user_func_array( 'Mockery::anyOf', $this->mocked_options ) )
