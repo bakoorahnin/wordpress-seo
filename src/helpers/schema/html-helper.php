@@ -15,6 +15,14 @@ class HTML_Helper {
 	 * @return string The sanitized HTML.
 	 */
 	public function sanitize( $html ) {
+		if ( ! \is_string( $html ) || empty( $html ) ) {
+			if ( \is_int( $html ) || \is_float( $html ) ) {
+				return (string) $html;
+			}
+
+			return '';
+		}
+
 		return \strip_tags( $html, '<h1><h2><h3><h4><h5><h6><br><ol><ul><li><a><p><b><strong><i><em>' );
 	}
 
@@ -26,6 +34,14 @@ class HTML_Helper {
 	 * @return string The sanitized HTML.
 	 */
 	public function smart_strip_tags( $html ) {
+		if ( ! \is_string( $html ) || empty( $html ) ) {
+			if ( \is_int( $html ) || \is_float( $html ) ) {
+				return (string) $html;
+			}
+
+			return '';
+		}
+
 		// Replace all new lines with spaces.
 		$html = \preg_replace( '/(\r|\n)/', ' ', $html );
 
