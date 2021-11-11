@@ -31,6 +31,16 @@ abstract class TestCase extends YoastTestCase {
 			]
 		);
 // TO DISCUSS: These two expectations do not belong in `set_up()` and are causing every test to have an inflated assertion count of +2.
+/*
+THIS DOESN'T WORK - `with()`is not available on stubs using `when()`
+		Monkey\Functions\when( 'get_option' )
+			->with( \call_user_func_array( 'Mockery::anyOf', $this->mocked_options ) )
+			->justReturn( [] );
+		Monkey\Functions\when( 'get_site_option' )
+			->with( \call_user_func_array( 'Mockery::anyOf', $this->mocked_options ) )
+			->justReturn( [] );
+*/
+
 		Monkey\Functions\expect( 'get_option' )
 			->zeroOrMoreTimes()
 			->with( \call_user_func_array( 'Mockery::anyOf', $this->mocked_options ) )
