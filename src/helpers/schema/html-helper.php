@@ -7,6 +7,9 @@ namespace Yoast\WP\SEO\Helpers\Schema;
  */
 class HTML_Helper {
 
+// TODO: add private helper and support Stringable
+// REDISCUSS in next session with Joost B.
+
 	/**
 	 * Sanitizes a HTML string by stripping all tags except headings, breaks, lists, links, paragraphs and formatting.
 	 *
