@@ -121,8 +121,8 @@ class Indexable_Post_Builder {
 
 		// Set additional meta-robots values.
 		$indexable->is_robots_nofollow = ( $this->get_meta_value( $post_id, 'meta-robots-nofollow' ) === '1' );
-		$noindex_advanced              = $this->get_meta_value( $post_id, 'meta-robots-adv' ); // Should this be cast to string ?
-		$meta_robots                   = \explode( ',', $noindex_advanced ); // Should this be wrapped in a `if (is_string())` condition ?
+		$noindex_advanced              = $this->get_meta_value( $post_id, 'meta-robots-adv' );
+		$meta_robots                   = \explode( ',', $noindex_advanced );
 		foreach ( $this->get_robots_options() as $meta_robots_option ) {
 			$indexable->{'is_robots_' . $meta_robots_option} = \in_array( $meta_robots_option, $meta_robots, true ) ? 1 : null;
 		}
@@ -130,7 +130,7 @@ class Indexable_Post_Builder {
 		$this->reset_social_images( $indexable );
 
 		foreach ( $this->get_indexable_lookup() as $meta_key => $indexable_key ) {
-			$indexable->{$indexable_key} = $this->get_meta_value( $post_id, $meta_key );
+			$indexable->{$indexable_key} = $this->get_meta_value( $post_id, $meta_key );// RISK
 		}
 
 		if ( empty( $indexable->breadcrumb_title ) ) {
@@ -149,8 +149,8 @@ class Indexable_Post_Builder {
 		$indexable->has_public_posts = $this->has_public_posts( $indexable );
 		$indexable->blog_id          = \get_current_blog_id();
 
-		$indexable->schema_page_type    = $this->get_meta_value( $post_id, 'schema_page_type' );
-		$indexable->schema_article_type = $this->get_meta_value( $post_id, 'schema_article_type' );
+		$indexable->schema_page_type    = $this->get_meta_value( $post_id, 'schema_page_type' );// RISK
+		$indexable->schema_article_type = $this->get_meta_value( $post_id, 'schema_article_type' );// RISK
 
 		$indexable->object_last_modified = $post->post_modified_gmt;
 		$indexable->object_published_at  = $post->post_date_gmt;
@@ -335,12 +335,7 @@ class Indexable_Post_Builder {
 	 * @return mixed The value of the indexable entry to use.
 	 */
 	protected function get_meta_value( $post_id, $meta_key ) {
-		$value = WPSEO_Meta::get_value( $meta_key, $post_id );
-		if ( \is_string( $value ) && $value === '' ) {
-			return null; // Is this correct ?
-		}
-
-		return $value;
+		return WPSEO_Meta::get_value( $meta_key, $post_id );
 	}
 
 	/**
