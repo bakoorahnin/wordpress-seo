@@ -66,7 +66,7 @@ class Indexable_Test extends TestCase {
 			->with( 'permalink_hash', \strlen( $permalink ) . ':' . \md5( $permalink ) );
 		// Once for going into the if-statement, then twice for the permalink_hash.
 		$this->instance->orm->expects( 'get' )->times( 5 )->with( 'permalink' )->andReturn( $permalink );
-		$this->instance->orm->expects( 'get' )->once()->with( 'primary_focus_keyword' )->andReturn( 'keyword' );
+		$this->instance->orm->expects( 'get' )->twice()->with( 'primary_focus_keyword' )->andReturn( 'keyword' );
 		$this->instance->orm->expects( 'save' )->once();
 
 		$this->instance->save();
@@ -102,7 +102,7 @@ class Indexable_Test extends TestCase {
 			->with( 'permalink_hash', \strlen( $permalink_no_slash ) . ':' . \md5( $permalink_no_slash ) );
 		// Once for going into the if-statement, then once more for trailingslashit, then twice for the permalink_hash.
 		$this->instance->orm->expects( 'get' )->times( 5 )->with( 'permalink' )->andReturn( $permalink_no_slash );
-		$this->instance->orm->expects( 'get' )->once()->with( 'primary_focus_keyword' )->andReturn( 'keyword' );
+		$this->instance->orm->expects( 'get' )->twice()->with( 'primary_focus_keyword' )->andReturn( 'keyword' );
 		$this->instance->orm->expects( 'save' )->once();
 
 		$this->instance->save();
@@ -118,7 +118,7 @@ class Indexable_Test extends TestCase {
 		$keyword           = $keyword_truncated . 'l primary focus keyword. Because it does not fit in the database field, we truncate the value.';
 
 		$this->instance->orm->expects( 'get' )->once()->with( 'permalink' )->andReturnFalse();
-		$this->instance->orm->expects( 'get' )->twice()->with( 'primary_focus_keyword' )->andReturn( $keyword );
+		$this->instance->orm->expects( 'get' )->times( 3 )->with( 'primary_focus_keyword' )->andReturn( $keyword );
 		$this->instance->orm->expects( 'set' )->once()->with( 'primary_focus_keyword', $keyword_truncated );
 		$this->instance->orm->expects( 'save' )->once();
 
@@ -178,7 +178,7 @@ class Indexable_Test extends TestCase {
 		$this->instance->orm->expects( 'set' )
 			->once()
 			->with( 'permalink_hash', \strlen( $permalink ) . ':' . \md5( $permalink ) );
-		$this->instance->orm->expects( 'get' )->once()->with( 'primary_focus_keyword' )->andReturn( 'keyword' );
+		$this->instance->orm->expects( 'get' )->twice()->with( 'primary_focus_keyword' )->andReturn( 'keyword' );
 		$this->instance->orm->expects( 'save' )->once();
 
 		$this->instance->set( 'permalink', $permalink );
