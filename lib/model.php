@@ -110,7 +110,7 @@ class Model implements JsonSerializable {
 		// Set the class variable to the custom value based on the WPDB prefix.
 		$class::$table = static::get_table_name( $class_name, $yoast_prefix );
 
-		return static::factory( $class_name, null );
+		return static::factory( $class_name );
 	}
 
 	/**
