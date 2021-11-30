@@ -173,9 +173,7 @@ class Model implements JsonSerializable {
 			return $default_value;
 		}
 
-		$properties = \get_class_vars( $class_name );
-
-		return $properties[ $property ];
+		return $class_name::${$property};
 	}
 
 	/**
