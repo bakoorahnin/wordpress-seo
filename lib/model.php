@@ -166,7 +166,7 @@ class Model implements JsonSerializable {
 	 * @param string      $property      The property to get the value for.
 	 * @param string|null $default_value Default value when property does not exist.
 	 *
-	 * @return string The value of the property.
+	 * @return string|null The value of the property or the default value if the property doesn't exist.
 	 */
 	protected static function get_static_property( $class_name, $property, $default_value = null ) {
 		if ( ! \class_exists( $class_name ) || ! \property_exists( $class_name, $property ) ) {
