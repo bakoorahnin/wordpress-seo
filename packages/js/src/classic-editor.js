@@ -9,7 +9,7 @@ import initPrimaryCategory from "./initializers/primary-category";
 import createClassicEditorWatcher, { getEditorData } from "./watchers/classicEditorWatcher";
 import { getAnalysisConfiguration } from "./classic-editor/analysis";
 
-domReady( async () => {
+domReady( async() => {
 	// Initialize the tab behavior of the metabox.
 	initTabs( jQuery );
 
