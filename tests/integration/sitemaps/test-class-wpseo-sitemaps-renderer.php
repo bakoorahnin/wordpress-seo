@@ -86,6 +86,86 @@ class WPSEO_Sitemaps_Renderer_Test extends WPSEO_UnitTestCase {
 	}
 
 	/**
+	 * Tests retrieval of a sitemap where a location and an image URL have a query variable.
+	 *
+	 * @covers WPSEO_Sitemaps_Renderer::encode_url_rfc3986
+	 *
+	 * @dataProvider data_encode_url_rfc3986
+	 *
+	 * @param string $loc      Page URL.
+	 * @param string $expected Expected URL as used in the XML sitemap output.
+	 *                         Defaults to the passed $loc.
+	 */
+	public function test_encode_url_rfc3986( $loc, $expected = null ) {
+
+		if ( ! isset( $expected ) ) {
+			$expected = $loc;
+		}
+
+		$links = [ [ 'loc' => $loc ] ];
+		$index = self::$class_instance->get_sitemap( $links, 'post', 0 );
+
+		$this->assertStringContainsString( '<loc>' . $expected . '</loc>', $index );
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array
+	 */
+	public function data_encode_url_rfc3986() {
+		return [
+			'Full URL which will validate with the filter' => [
+				'loc'      => 'http://example.com/page-name?s=keyword&p=2#anchor',
+				'expected' => 'http://example.com/page-name?s=keyword&amp;p=2#anchor',
+			],
+
+			/*
+			 * All the below URLs will not validate with `FILTER_VALIDATE_URL` and will therefore
+			 * fall through to the real logic in the function.
+			 */
+			'URL: no scheme, no path, no trailing slash either' => [
+				'loc' => 'example.com',
+			],
+			'URL: no scheme, no path, with trailing slash' => [
+				'loc' => '//example.com/',
+			],
+			'URL: no scheme, has path, no encoding needed' => [
+				'loc' => '//example.com/my-category/my-page/',
+			],
+			'URL: no scheme, has path, encoding needed, not pre-encoded' => [
+				'loc'      => '//example.com/my category/my=page*without"enco@ding/',
+				'expected' => '//example.com/my%20category/my%3Dpage%2Awithout%26quot%3Benco%40ding/',
+			],
+			'URL: no scheme, has path, encoding needed, pre-encoded' => [
+				'loc' => '//example.com/my%20category/my%3Dpage%2Awithout%26quot%3Benco%40ding/',
+			],
+			'URL: no scheme, no path, has query' => [
+				'loc'      => '//example.com/?s=keyword&p=2',
+				'expected' => '//example.com/?s=keyword&amp;amp%3Bp=2', // BUG ?
+			],
+			'URL: no scheme, has path, has query' => [
+				'loc'      => '//example.com/page-name?s=keyword&p=2',
+				'expected' => '//example.com/page-name?s=keyword&amp;amp%3Bp=2', // BUG ?
+			],
+			'URL: no scheme, has path, has query, path needs encoding' => [
+				'loc'      => '//example.com/my category?s=keyword&p=2',
+				'expected' => '//example.com/my%20category?s=keyword&amp;amp%3Bp=2', // BUG ?
+			],
+/*
+			'' => [
+				'loc'      => '',
+				'expected' => '',
+			],
+			'' => [
+				'loc'      => '',
+				'expected' => '',
+			],
+*/
+		];
+	}
+
+	/**
 	 * Helper function to set plugin url to a different domain.
 	 *
 	 * @return string

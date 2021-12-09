@@ -206,9 +206,9 @@ class WPSEO_Sitemaps_Renderer {
 	 * @return string
 	 */
 	public function sitemap_url( $url ) {
+echo PHP_EOL, PHP_EOL, 'incoming URL:           ', $url['loc'], PHP_EOL;
 
 		$date = null;
-
 
 		if ( ! empty( $url['mod'] ) ) {
 			// Create a DateTime object date in the correct timezone.
@@ -216,8 +216,9 @@ class WPSEO_Sitemaps_Renderer {
 		}
 
 		$url['loc'] = htmlspecialchars( $url['loc'], ENT_COMPAT, $this->output_charset, false );
-
+echo 'URL with special chars: ', $url['loc'], PHP_EOL;
 		$output  = "\t<url>\n";
+//echo 'URL as returned from encode_url: ', $this->encode_url_rfc3986( $url['loc'] ), PHP_EOL, PHP_EOL;
 		$output .= "\t\t<loc>" . $this->encode_url_rfc3986( $url['loc'] ) . "</loc>\n";
 		$output .= empty( $date ) ? '' : "\t\t<lastmod>" . htmlspecialchars( $date, ENT_COMPAT, $this->output_charset, false ) . "</lastmod>\n";
 
@@ -282,14 +283,17 @@ class WPSEO_Sitemaps_Renderer {
 	 * @return string
 	 */
 	protected function encode_url_rfc3986( $url ) {
+//echo 'incoming URL 3986: ', $url, PHP_EOL;
 
 		if ( filter_var( $url, FILTER_VALIDATE_URL ) ) {
+echo 'Returning as validated', PHP_EOL;
 			return $url;
 		}
 
 		$path = wp_parse_url( $url, PHP_URL_PATH );
 
 		if ( ! empty( $path ) && $path !== '/' ) {
+//echo 'Path: ', $path, PHP_EOL;
 			$encoded_path = explode( '/', $path );
 
 			// First decode the path, to prevent double encoding.
@@ -297,12 +301,15 @@ class WPSEO_Sitemaps_Renderer {
 
 			$encoded_path = array_map( 'rawurlencode', $encoded_path );
 			$encoded_path = implode( '/', $encoded_path );
+//echo 'Encoded Path: ', $encoded_path, PHP_EOL;
 
 			$url = str_replace( $path, $encoded_path, $url );
 		}
+//echo 'URL after rawencode: ', $url, PHP_EOL;
 
 		$query = wp_parse_url( $url, PHP_URL_QUERY );
-
+//echo PHP_EOL, 'query part:', PHP_EOL;
+//var_dump($query);
 		if ( ! empty( $query ) ) {
 
 			parse_str( $query, $parsed_query );
@@ -311,6 +318,8 @@ class WPSEO_Sitemaps_Renderer {
 
 			$url = str_replace( $query, $parsed_query, $url );
 		}
+
+echo 'outgoing URL:           ', $url, PHP_EOL;
 
 		return $url;
 	}
